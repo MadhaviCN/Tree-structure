@@ -20,3 +20,9 @@ Open the terminal
 Steps to run tests
     * npm test -- --coverage
     * This will create a coverage folder and shows the unit test coverage for all the files.
+
+Additional commands
+    1. Install 
+        * npm install eslint --save-dev - This will show if there are any linting errors in the application
+        * npm run lint
+        
