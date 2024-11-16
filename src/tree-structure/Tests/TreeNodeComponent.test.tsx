@@ -1,9 +1,7 @@
-import React from "react";
-import { render, screen, fireEvent, waitFor } from "@testing-library/react";
-import { act } from 'react';
+import { render, screen, fireEvent } from "@testing-library/react";
 import TreeNodeComponent from "../TreeNodeComponent";
 
-// Mock the API response data
+// Mock the API response data 
 const mockNode = {
     taxon: 'Family',
     name: 'Felidae',

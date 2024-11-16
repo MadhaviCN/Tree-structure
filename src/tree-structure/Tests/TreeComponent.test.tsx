@@ -1,5 +1,4 @@
-import React from "react";
-import { render, screen, fireEvent, waitFor } from "@testing-library/react";
+import { render, screen, fireEvent } from "@testing-library/react";
 import TreeComponent from "../TreeComponent";
 
 // Mock the API response data
@@ -33,13 +32,10 @@ describe("Tree Component", () => {
   test("renders tree data after fetching", async () => {
     render(<TreeComponent />);
     expect(global.fetch).toHaveBeenCalledTimes(1);
-    console.log(screen.debug()); // This will show the current state of the DOM
-    await waitFor(() =>
-      expect(screen.queryByText("Felidae")).toBeInTheDocument()
-    );
-    await waitFor(() =>
-      expect(screen.queryByText("Canidae")).toBeInTheDocument()
-    );
+    const node = await screen.findByText(/Felidae/i);
+    expect(node).toBeInTheDocument();
+    const candi = await screen.findByText("Canidae")
+    expect(candi).toBeInTheDocument()
   });
 
   test("search filters data on input change", async () => {
@@ -48,23 +44,18 @@ describe("Tree Component", () => {
     fireEvent.change(screen.getByRole("textbox"), {
       target: { value: "Felis" },
     });
-    console.log("screen", screen.debug());
     const canidaeText = await screen.findByText("Canidae");
     expect(canidaeText).toBeInTheDocument();
     const felidaeText = screen.queryByText("Felidae");
     expect(felidaeText).not.toBeInTheDocument();
   });
-  
+
   test("debounce works correctly", async () => {
     render(<TreeComponent />);
     fireEvent.change(screen.getByRole("textbox"), {
       target: { value: "Feli" },
     });
-
-    // Wait for debounce delay to pass
-    await waitFor(() =>
-      expect(screen.getByText("Felidae")).toBeInTheDocument()
-    );
-    expect(screen.getByText("Felidae")).toBeInTheDocument();
+    const node = await screen.findByText("Felidae");
+    expect(node).toBeInTheDocument();
   });
 });
