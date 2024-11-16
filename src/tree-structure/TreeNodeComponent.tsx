@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { TreeTaxonomyProps } from "./types";
 
 /**
@@ -13,6 +13,7 @@ import { TreeTaxonomyProps } from "./types";
  */
 interface TaxonomyProps {
   node: TreeTaxonomyProps;
+  initialOpenNodes?: string[];
 }
 
 /**
@@ -23,10 +24,19 @@ interface TaxonomyProps {
  * - Keyboard functionality using right and left arrow for expanding and collapsing of nodes
  * @type {React.FC<TaxonomyProps>}
  */
-const TreeNodeComponent: React.FC<TaxonomyProps> = React.memo(({ node }) => {
+const TreeNodeComponent: React.FC<TaxonomyProps> = React.memo(({ node, initialOpenNodes }) => {
 
     // state to store boolean value 
   const [isExpanded, setIsExpanded] = useState(false);
+
+  /*
+  * This useEffect is to expand and the intial value on page load
+  */
+  useEffect(() => {
+    if(initialOpenNodes?.includes(node.name)) {
+      setIsExpanded(true)
+    }
+  }, [initialOpenNodes, node.name])
  
   /** Function is written to expand and collapse the nodes */
   const handleToggle = () => {
@@ -49,7 +59,7 @@ const TreeNodeComponent: React.FC<TaxonomyProps> = React.memo(({ node }) => {
   } 
 
   return (
-    <div style={{ marginLeft: "20px" }}>
+    <div style={{ marginLeft: "10%" }}>
       <div style={{display: "flex", padding:"10px"}}>
         {node?.children && node?.children?.length > 0 && (
           <button onClick={handleToggle} style={{ marginRight: "20px", fontSize:"medium" }} onKeyDown={arrowKeyPress}>
@@ -61,7 +71,7 @@ const TreeNodeComponent: React.FC<TaxonomyProps> = React.memo(({ node }) => {
       {isExpanded && node?.children && (
         <div>
           {node?.children?.map((child) => (
-            <TreeNodeComponent key={child.taxon} node={child} />
+            <TreeNodeComponent key={child.taxon} node={child} initialOpenNodes={initialOpenNodes} />
           ))}
         </div>
       )}

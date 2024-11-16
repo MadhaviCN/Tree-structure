@@ -5,8 +5,7 @@ To run this application in the local. Please follow the steps.
 1. Make sure you have installed Node.js( > 16v)
 2. NPM (node package manager) should be installed (> 8v)
 
-3. Steps to run application
-    Open the terminal
+3. Steps to run application - Open the terminal
     1. Clone the repository using below command
         *  git clone  'repository url'
     2. Navigate to the project directory
@@ -22,6 +21,6 @@ To run this application in the local. Please follow the steps.
     2. This will create a coverage folder and shows the unit test coverage for all the files.
 
 5. Additional commands
-    1. npm install eslint --save-dev - This will show if there are any linting errors in the application
+    1. npm install eslint --save-dev - This will use ESLint to check the code for any issues
     2. npm run lint
         

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useMemo } from "react";
 import TreeNodeComponent from "./TreeNodeComponent";
 import {TreeTaxonomyProps} from "./types";
 
@@ -16,6 +16,13 @@ const TreeComponent:React.FC = () => {
     const [searchQuery, setSearchQuery] = useState('')
     const [debounce, setDebounce] = useState('')
 
+    /**
+     * This is to expand and the intial value on page load
+     *
+     * @type {{}}
+     */
+    const initialOpenNodes = ['Felidae']
+
     useEffect(() => {
         fetchData();
     }, [])
@@ -30,7 +37,7 @@ const TreeComponent:React.FC = () => {
 
     /**
      * fetchData()
-     * Asynchronously fetches the taxonomy data from a mock API. We need to change only the url once we get from the backend
+     * Asynchronously fetches the taxonomy data from a mock API. We need to change only the url once we get it from the backend
      * @async
      *
      */
@@ -50,7 +57,7 @@ const TreeComponent:React.FC = () => {
 
     /**
      * searchData()
-     * Function to search and filter only parent nodes. name, common_name and taxon is changed to lowercase and checked with debouce value. 
+     * Function to search and filter parent nodes. name, common_name and taxon is changed to lowercase and checked with debouce value. 
      * Debounce will make sure to trigger the function only user stops typing in the filed
      * @param {TreeTaxonomyProps[]} data
      * @returns {TreeTaxonomyProps[]}
@@ -66,12 +73,12 @@ const TreeComponent:React.FC = () => {
 
     return (
         <div>
-            <div>
+            <div style={{margin: "10px"}}>
                 <label htmlFor="searchField">Search node: </label>
-                <input type="text" name="searchField" value={searchQuery} onChange={(e) => setSearchQuery(e.target.value)}/>
+                <input type="text" placeholder="Search query" style={{fontSize: '16px'}} name="searchField" value={searchQuery} onChange={(e) => setSearchQuery(e.target.value)}/>
             </div>
             {searchData(data).map((child) => (
-                <TreeNodeComponent key={child.taxon} node={child}/>
+                <TreeNodeComponent key={child.taxon} node={child} initialOpenNodes={initialOpenNodes}/>
             ))}
         </div>
     )

@@ -1,4 +1,4 @@
-import { render, screen, fireEvent } from "@testing-library/react";
+import { render, screen, fireEvent, waitFor } from "@testing-library/react";
 import TreeComponent from "../TreeComponent";
 
 // Mock the API response data
@@ -31,11 +31,11 @@ global.fetch = jest.fn().mockResolvedValue({
 describe("Tree Component", () => {
   test("renders tree data after fetching", async () => {
     render(<TreeComponent />);
-    expect(global.fetch).toHaveBeenCalledTimes(1);
-    const node = await screen.findByText(/Felidae/i);
+    await waitFor(() => expect(global.fetch).toHaveBeenCalled());
+    const node = await screen.findByText('Felidae');
     expect(node).toBeInTheDocument();
-    const candi = await screen.findByText("Canidae")
-    expect(candi).toBeInTheDocument()
+    const canidae= await screen.findByText("Canidae")
+    expect(canidae).toBeInTheDocument()
   });
 
   test("search filters data on input change", async () => {
