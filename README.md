@@ -8,15 +8,15 @@ To run this application in the local. Please follow the steps.
 Steps to run application
 Open the terminal
 1. Clone the repository using below command
-    git clone  'repository url'
+   *  git clone  'repository url'
 2. Navigate to the project directory
-    cd tree-node/
+    * cd tree-node/
 3. Install npm package
-    npm i
+    * npm i
 4. Run the application
-    npm start
-    this will automatically opens in browser with an url localhost:3000
+    * npm start
+    * this will automatically opens in browser with an url localhost:3000
 
 Steps to run tests
-1. Run npm test -- --coverage
+1. npm test -- --coverage
     This will show the unit test coverage for all the files.
