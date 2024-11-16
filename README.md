@@ -18,5 +18,5 @@ Open the terminal
     * this will automatically opens in browser with an url localhost:3000
 
 Steps to run tests
-1. npm test -- --coverage
-    This will show the unit test coverage for all the files.
+    * npm test -- --coverage
+    * This will create a coverage folder and shows the unit test coverage for all the files.
