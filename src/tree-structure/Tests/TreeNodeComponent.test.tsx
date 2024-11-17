@@ -1,7 +1,7 @@
 import { render, screen, fireEvent } from "@testing-library/react";
 import TreeNodeComponent from "../TreeNodeComponent";
 
-// Mock the API response data 
+// Mock the API response data  
 const mockNode = {
     taxon: 'Family',
     name: 'Felidae',
@@ -12,47 +12,54 @@ const mockNode = {
         name: 'Felis catus',
         common_name: 'Felis catus',
         children: [],
-      },
-      {
-        taxon: 'Species',
-        name: 'Felis silvestris',
-        common_name: 'Felis silvestris',
-        children: [],
-      },
+      }
     ],
   };
 
   describe('TreeNodeComponent', () => {
-    test('renders node name and children', () => {
+    test("renders the root node", () => {
       render(<TreeNodeComponent node={mockNode} />);
-      expect(screen.getByText('Felidae')).toBeInTheDocument();
-      expect(screen.queryByText('Felis catus')).toBeNull();
-      expect(screen.queryByText('Felis silvestris')).toBeNull();
+      expect(screen.getByText("Felidae")).toBeInTheDocument();
     });
-
-    test('expand and collapse node on button click', () => {
+  
+    test("renders child nodes when expanded", () => {
       render(<TreeNodeComponent node={mockNode} />);
-      const toggleButton = screen.getByRole('button')
+      const toggleButton = screen.getByText("+");
       fireEvent.click(toggleButton);
-      expect(screen.getByText('Felis catus')).toBeInTheDocument()
-      expect(screen.getByText('Felis silvestris')).toBeInTheDocument()
-      fireEvent.click(toggleButton)
-      expect(screen.getByText('Felidae')).toBeInTheDocument()
+      expect(screen.getByText("Felis catus")).toBeInTheDocument();
     });
-
-    test('expand and collapse using arrow keys', () => {
+  
+    test("handles initialOpenNodes prop correctly", () => {
+      render(
+        <TreeNodeComponent
+          node={mockNode}
+          initialOpenNodes={["Felidae"]}
+        />
+      );
+      expect(screen.getByText("Felis catus")).toBeInTheDocument();
+    });
+  
+    test("invokes onClick callback when a node is toggled", () => {
+      const mockOnClick = jest.fn();
+      render(<TreeNodeComponent node={mockNode} onClick={mockOnClick} />);
+      const toggleButton = screen.getByText("+");
+      fireEvent.click(toggleButton);
+      expect(mockOnClick).toHaveBeenCalledWith(mockNode);
+    });
+  
+    test("handles arrow key navigation", () => {
       render(<TreeNodeComponent node={mockNode} />);
+      const toggleButton = screen.getByText("+");
+      fireEvent.keyDown(toggleButton, { key: "ArrowRight" });
+      expect(screen.getByText("Felis catus")).toBeInTheDocument();
+      fireEvent.keyDown(toggleButton, { key: "ArrowLeft" });
+      expect(screen.queryByText("Felis catus")).not.toBeInTheDocument();
+    });
   
-      const toggleButton = screen.getByRole('button');
-      // onclick on right arrow, node shoudl expand
-      fireEvent.keyDown(toggleButton, { key: 'ArrowRight' });
-  
-      expect(screen.getByText('Felis catus')).toBeInTheDocument();
-      expect(screen.getByText('Felis silvestris')).toBeInTheDocument();
-      // on click of left arrow, node should collapse
-      fireEvent.keyDown(toggleButton, { key: 'ArrowLeft' });
-  
-      expect(screen.queryByText('Felis catus')).toBeNull();
-      expect(screen.queryByText('Felis silvestris')).toBeNull();
+    test("applies custom styles to the toggle button", () => {
+      const treeStyle = { backgroundColor: "red" };
+      render(<TreeNodeComponent node={mockNode} style={treeStyle} />);
+      const toggleButton = screen.getByText("+");
+      expect(toggleButton).toHaveStyle("background-color: red");
     });
 });

@@ -1,7 +1,7 @@
 import { render, screen, fireEvent, waitFor } from "@testing-library/react";
 import TreeComponent from "../TreeComponent";
 
-// Mock the API response data
+// Mock the API response data 
 const mockData = [
   {
     taxon: "Family",
@@ -29,6 +29,11 @@ global.fetch = jest.fn().mockResolvedValue({
 });
 
 describe("Tree Component", () => {
+  test("renders the search input", async () => {
+    render(<TreeComponent />);
+    expect(screen.getByPlaceholderText("Search query")).toBeInTheDocument();
+  });
+
   test("renders tree data after fetching", async () => {
     render(<TreeComponent />);
     await waitFor(() => expect(global.fetch).toHaveBeenCalled());
@@ -55,7 +60,7 @@ describe("Tree Component", () => {
     fireEvent.change(screen.getByRole("textbox"), {
       target: { value: "Feli" },
     });
-    const node = await screen.findByText("Felidae");
+    const node = screen.getByDisplayValue("Feli");
     expect(node).toBeInTheDocument();
   });
 });

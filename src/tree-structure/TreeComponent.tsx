@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useMemo } from "react";
+import React, { useEffect, useState } from "react";
 import TreeNodeComponent from "./TreeNodeComponent";
 import {TreeTaxonomyProps} from "./types";
 
@@ -10,8 +10,9 @@ import {TreeTaxonomyProps} from "./types";
  * - Debounce mechanism to optimize search 
  * - Fetchdata method to fetch the taxonomy data from the mock api
  * - Searchdata method to search and filter by names, common_names, taxons
+ * - custom clicks and styles are added
  */
-const TreeComponent:React.FC = () => {
+const TreeComponent:React.FC = React.memo(() => {
     const [data, setData] = useState<TreeTaxonomyProps[]>([])
     const [searchQuery, setSearchQuery] = useState('')
     const [debounce, setDebounce] = useState('')
@@ -35,6 +36,11 @@ const TreeComponent:React.FC = () => {
         return () => clearTimeout(timer)
     }, [searchQuery])
 
+    // Custom onClick function that logs the clicked node's details
+    const handleNodeClick = (node: TreeTaxonomyProps) => {
+        console.log('Node clicked:', node);
+    };
+
     /**
      * fetchData()
      * Asynchronously fetches the taxonomy data from a mock API. We need to change only the url once we get it from the backend
@@ -53,6 +59,11 @@ const TreeComponent:React.FC = () => {
         } catch(err) {
             console.log(err)
         }
+    }
+
+    // Custom styles
+    const treeStyles = {
+        // add css properties here
     }
 
     /**
@@ -78,10 +89,11 @@ const TreeComponent:React.FC = () => {
                 <input type="text" placeholder="Search query" style={{fontSize: '16px'}} name="searchField" value={searchQuery} onChange={(e) => setSearchQuery(e.target.value)}/>
             </div>
             {searchData(data).map((child) => (
-                <TreeNodeComponent key={child.taxon} node={child} initialOpenNodes={initialOpenNodes}/>
+                <TreeNodeComponent key={child.taxon} node={child} initialOpenNodes={initialOpenNodes} 
+                onClick={handleNodeClick} style={treeStyles}/>
             ))}
         </div>
     )
-}
+})
 
 export default TreeComponent
