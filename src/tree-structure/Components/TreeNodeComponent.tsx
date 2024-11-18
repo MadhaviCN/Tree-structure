@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { TreeTaxonomyProps } from "./types";
+import { TreeTaxonomyProps } from "../types";
 
 
 /**
@@ -10,7 +10,7 @@ import { TreeTaxonomyProps } from "./types";
  * common_name {string}
  * children {TaxonomyProps}
  * initialOpenNodes - optional {string}
- * onClick - {TaxonomyProps} - return void
+ * onClick - optional {TaxonomyProps} - return void
  * @interface TaxonomyProps
  * @typedef {TaxonomyProps}
  */
@@ -59,14 +59,14 @@ const TreeNodeComponent: React.FC<TaxonomyProps> = React.memo(({ node, initialOp
    * @param {React.KeyboardEvent} event
    */
   const arrowKeyPress = (event: React.KeyboardEvent) => {
-        if(event.key === "ArrowRight") {
+        if(event.key === "ArrowRight" && !isExpanded) {
           // expand on right arrow
             setIsExpanded(true)
-        } else if(event.key === "ArrowLeft") {
+        } else if(event.key === "ArrowLeft" && isExpanded) {
           // collapse on left arrow
             setIsExpanded(false)
         } else {
-            setIsExpanded(false)
+          setIsExpanded(false)
         }
   } 
 
@@ -74,7 +74,8 @@ const TreeNodeComponent: React.FC<TaxonomyProps> = React.memo(({ node, initialOp
     <div style={{ marginLeft: "10%" }}>
       <div style={{display: "flex", padding:"10px"}}>
         {node?.children && node?.children?.length > 0 && (
-          <button onClick={handleToggle} style={{ marginRight: "20px", fontSize:"medium", ...style}} onKeyDown={arrowKeyPress}>
+          <button onClick={handleToggle} style={{ marginRight: "20px", fontSize:"medium", ...style}} onKeyDown={arrowKeyPress}
+          aria-label={isExpanded ?  '-' : '+'}>
             {isExpanded ?  '-' : '+'}
           </button>
         )}

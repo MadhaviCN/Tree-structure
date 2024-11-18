@@ -1,5 +1,5 @@
 import './App.css';
-import TreeComponent from './tree-structure/TreeComponent'
+import TreeComponent from './tree-structure/Components/TreeComponent'
 
 function App() {
   return (
