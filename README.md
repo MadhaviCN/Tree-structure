@@ -16,9 +16,10 @@ To run this application in the local. Please follow the steps.
         * npm start
         * this will automatically opens in browser with an url localhost:3000
 
-4. Steps to run tests
-    1. npm test -- --coverage
-    2. This will create a coverage folder and shows the unit test coverage for all the files.
+4. Steps to run tests - navigate to tree-structure folder
+    1. cd src/tree-structure -- this is the place where tests folder is available
+    2. npm test -- --coverage
+    3. This will create a coverage folder and shows the unit test coverage for all the files.
 
 5. Additional commands
     1. npm install eslint --save-dev - This will use ESLint to check the code for any issues
